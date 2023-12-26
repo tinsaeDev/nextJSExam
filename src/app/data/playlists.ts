@@ -18,6 +18,8 @@ export const playLists: PlayList[] = [
         genere: "HipHop",
         src: {
           "128": "",
+          "192": "",
+          "320": "",
         },
         thumbnail: "",
         title: "It is your birth day",

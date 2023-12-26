@@ -46,8 +46,8 @@ const Visualizer = (props: { blob: Blob; currentTime: number }) => {
           blob={blob}
           width={600}
           height={200}
-          barWidth={3}
-          gap={3}
+          barWidth={1}
+          gap={1}
           barColor={"#fff"}
         />
       }

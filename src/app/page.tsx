@@ -13,7 +13,13 @@ const darkTheme = createTheme({
   },
 });
 
-import { Download, Headphones, PlayArrow, Share } from "@mui/icons-material";
+import {
+  Download,
+  Headphones,
+  HeartBroken,
+  PlayArrow,
+  Share,
+} from "@mui/icons-material";
 import {
   Button,
   Chip,
@@ -26,6 +32,7 @@ import {
 import Image from "next/image";
 import MediaPayer from "./components/MediaPlayer";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import { useState } from "react";
 
 export default function Home() {
   const music: Music = {
@@ -170,7 +177,16 @@ export default function Home() {
                   </Typography>
 
                   {/* Comment list */}
-                  <Stack mt={2} flexGrow={1} spacing={2}>
+                  <Stack
+                    mt={2}
+                    flexGrow={1}
+                    spacing={2}
+                    sx={{
+                      p: 2,
+                      maxHeight: "360px",
+                      overflow: "auto",
+                    }}
+                  >
                     {[1, 2, 3, 4].map((comment, index) => {
                       return <CommentList key={index} />;
                     })}
@@ -189,9 +205,61 @@ export default function Home() {
   );
 }
 
-function CommentList() {
+function CommentReply() {
+  const [favoriteComment, setFavoriteComment] = useState(false);
+
   return (
-    <Stack spacing={1} minWidth={300}>
+    <>
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <Stack direction="row" spacing={0.5} alignItems="center">
+          <Image
+            alt="Cmmenter"
+            src="https://picsum.photos/24"
+            width={24}
+            height={24}
+            style={{
+              borderRadius: 12,
+            }}
+          />
+          <Typography variant="caption" fontWeight="bold">
+            Ojole
+          </Typography>
+        </Stack>
+        <Typography variant="caption" color="text.secondary">
+          1 hour ago
+        </Typography>
+      </Stack>
+
+      <Stack
+        sx={{
+          paddingLeft: "24px",
+        }}
+      >
+        <Typography variant="caption" fontWeight="bold" color="text.secondary">
+          Snare has execive reverb! How does it sound to you?
+        </Typography>
+
+        {/* Reactions */}
+        <Stack mt={1} spacing={2} direction="row" alignItems="center">
+          {/* Favorite  */}
+          <IconButton
+            size="small"
+            onClick={() => {
+              setFavoriteComment(!favoriteComment);
+            }}
+          >
+            <HeartBroken color={favoriteComment ? "info" : "inherit"} />
+          </IconButton>
+        </Stack>
+      </Stack>
+    </>
+  );
+}
+function Comment(props: { showReplies: boolean }) {
+  const { showReplies } = props;
+  const [favoriteComment, setFavoriteComment] = useState(false);
+  return (
+    <>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Stack direction="row" spacing={0.5} alignItems="center">
           <Image
@@ -220,16 +288,58 @@ function CommentList() {
           1:22
         </Button>
       </Stack>
-      <Typography
+      <Stack
         sx={{
           paddingLeft: "24px",
         }}
-        variant="caption"
-        fontWeight="bold"
-        color="text.secondary"
       >
-        Snare has execive reverb! How does it sound to you?
-      </Typography>
+        <Typography variant="caption" fontWeight="bold" color="text.secondary">
+          Snare has execive reverb! How does it sound to you?
+        </Typography>
+
+        {/* Reactions */}
+        <Stack mt={1} spacing={2} direction="row" alignItems="center">
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            fontWeight="bold"
+          >
+            Replay
+          </Typography>
+
+          {/* Favorite  */}
+          <Stack direction="row" alignItems="center">
+            <IconButton
+              size="small"
+              onClick={() => {
+                setFavoriteComment(!favoriteComment);
+              }}
+            >
+              <HeartBroken color={favoriteComment ? "info" : "inherit"} />
+            </IconButton>
+            <Typography>2</Typography>
+          </Stack>
+        </Stack>
+
+        {/* Replies */}
+        {showReplies && (
+          <Stack
+            sx={{
+              paddingLeft: "1rem",
+            }}
+          >
+            <CommentReply />
+          </Stack>
+        )}
+      </Stack>
+    </>
+  );
+}
+
+function CommentList() {
+  return (
+    <Stack spacing={1} minWidth={300}>
+      <Comment showReplies={true} />
     </Stack>
   );
 }
@@ -241,47 +351,10 @@ export function CommentCard() {
       p={2}
       maxWidth={300}
       sx={{
-        borderRadius:1
+        borderRadius: 1,
       }}
     >
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Stack direction="row" spacing={0.5} alignItems="center">
-          <Image
-            alt="Cmmenter"
-            src="https://picsum.photos/24"
-            width={24}
-            height={24}
-            style={{
-              borderRadius: 12,
-            }}
-          />
-          <Typography variant="caption" fontWeight="bold">
-            Ojole
-          </Typography>
-        </Stack>
-        <Typography variant="caption" color="text.secondary">
-          1 hour ago
-        </Typography>
-        <Button
-          size="small"
-          variant="outlined"
-          sx={{
-            p: 0,
-          }}
-        >
-          1:22
-        </Button>
-      </Stack>
-      <Typography
-        sx={{
-          paddingLeft: "24px",
-        }}
-        variant="caption"
-        fontWeight="bold"
-        color="text.secondary"
-      >
-        Snare has execive reverb! How does it sound to you?
-      </Typography>
+      <Comment showReplies={false} />
     </Stack>
   );
 }
