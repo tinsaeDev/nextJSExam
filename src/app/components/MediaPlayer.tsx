@@ -40,14 +40,11 @@ const Visualizer = (props: { blob: Blob; currentTime: number }) => {
     >
       {
         <AudioVisualizer
-          onClick={(e) => {
-            console.log("EEE", e);
-          }}
           currentTime={props.currentTime}
           ref={visualizerRef}
           blob={blob}
-          width={800}
-          height={300}
+          width={600}
+          height={200}
           barWidth={3}
           gap={3}
           barColor={"#fff"}
@@ -96,61 +93,76 @@ export default function MediaPayer(props: { music: Music }) {
     <Box
       sx={{
         position: "relative",
+
+        height: "100%",
       }}
     >
       {blob ? (
-        <Stack justifyContent="space-between">
+        <Stack
+          flexGrow={1}
+          justifyContent="space-between"
+          sx={{
+            height: "100%",
+          }}
+        >
           <PL blob={blob} />
+
           <Visualizer blob={blob} currentTime={currentTime} />
-          <Slider
-            max={100}
-            value={(currentTime / duration) * 100}
-            onChange={(e) => {
-              if (audioPlayerRef.current) {
-                audioPlayerRef.current.currentTime =
-                  duration * (e.target.value / 100);
-              }
-            }}
-          />
 
           {/* Player Footer */}
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Typography>
-              <Typography color="primary" component="span" fontWeight={"bold"}>
-                {moment(currentTime * 1000).format("mm:ss")}
-              </Typography>
-              /
-              <Typography component="span">
-                {moment(duration * 1000).format("mm:ss")}
-              </Typography>{" "}
-            </Typography>
-
-            <Fab
-              color="info"
-              onClick={() => {
-                const player = audioPlayerRef.current;
-                if (!player) return;
-                if (isPlaying) {
-                  audioPlayerRef.current.pause();
-                  setIsPlaying(false);
-                } else {
-                  audioPlayerRef.current.play();
-
-                  setIsPlaying(true);
+          <Stack>
+            <Slider
+              max={100}
+              value={(currentTime / duration) * 100}
+              onChange={(e) => {
+                if (audioPlayerRef.current) {
+                  audioPlayerRef.current.currentTime =
+                    duration * (e.target.value / 100);
                 }
               }}
+            />
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
             >
-              {isPlaying ? (
-                <PauseCircle fontSize="large" />
-              ) : (
-                <PlayArrow fontSize="large" />
-              )}
-            </Fab>
-            <span></span>
+              <Typography>
+                <Typography
+                  color="primary"
+                  component="span"
+                  fontWeight={"bold"}
+                >
+                  {moment(currentTime * 1000).format("mm:ss")}
+                </Typography>
+                /
+                <Typography component="span">
+                  {moment(duration * 1000).format("mm:ss")}
+                </Typography>{" "}
+              </Typography>
+
+              <Fab
+                color="info"
+                onClick={() => {
+                  const player = audioPlayerRef.current;
+                  if (!player) return;
+                  if (isPlaying) {
+                    audioPlayerRef.current.pause();
+                    setIsPlaying(false);
+                  } else {
+                    audioPlayerRef.current.play();
+
+                    setIsPlaying(true);
+                  }
+                }}
+              >
+                {isPlaying ? (
+                  <PauseCircle fontSize="large" />
+                ) : (
+                  <PlayArrow fontSize="large" />
+                )}
+              </Fab>
+              <span></span>
+            </Stack>
           </Stack>
         </Stack>
       ) : (

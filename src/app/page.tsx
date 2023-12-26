@@ -1,10 +1,23 @@
-import { Download, PlayArrow, Share } from "@mui/icons-material";
+"use client";
+
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+    background: {
+      default: "#121212",
+      paper: "#1a1b1e",
+    },
+  },
+});
+
+import { Download, Headphones, PlayArrow, Share } from "@mui/icons-material";
 import {
-  Box,
   Button,
-  ButtonGroup,
+  Chip,
   Container,
-  Fab,
   IconButton,
   Stack,
   TextField,
@@ -12,8 +25,9 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import MediaPayer from "./components/MediaPlayer";
+import Grid from "@mui/material/Unstable_Grid2/Grid2";
 
-export default async function Home() {
+export default function Home() {
   const music: Music = {
     artist: {
       name: "Mickael Jackson",
@@ -30,115 +44,192 @@ export default async function Home() {
     title: "Beat It",
   };
   return (
-    <Container
-      sx={{
-        mt: 3,
-        background: "orange",
-        height: "90dvh",
-      }}
-    >
-      <Stack
-        direction="row"
-        sx={{
-          height: "100%",
-        }}
-      >
-        {/* Left Side, Media Player */}
-        <Stack
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <main>
+        <Container
           sx={{
-            minWidth: "70%",
-            p: 2,
+            mt: 3,
+            // background: "orange",
+            height: "90dvh",
           }}
         >
-          {/* Player Header */}
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="flex-start"
-          >
-            {/* Left */}
-
-            <Stack>
-              <Stack direction="row" spacing={2}>
-                <Image
-                  width={60}
-                  height={60}
-                  src={music.thumbnail}
-                  alt="Music Thumbnail"
-                />
-                <Stack>
-                  <Typography
-                    textTransform="capitalize"
-                    fontWeight="bold"
-                    variant="h5"
-                  >
-                    {music.title}
-                  </Typography>
-                  <Typography variant="caption">{music.genere}</Typography>
-                </Stack>
-              </Stack>
-              <Stack mt={2} direction="row" alignItems="center" spacing={1}>
-                <Image
-                  width={24}
-                  height={24}
-                  src={music.artist.avatar}
-                  style={{
-                    borderRadius: "12px",
-                  }}
-                  alt="Artist "
-                />
-                <Typography fontWeight="bold" variant="subtitle2">
-                  {music.artist.name}
-                </Typography>
-              </Stack>
-            </Stack>
-            {/* Right */}
-            <Stack direction="row" justifyContent="flex-end" spacing={1}>
-              <Button
-                color="primary"
-                size="small"
-                variant="contained"
-                startIcon={<Share />}
-              >
-                Share
-              </Button>
-              <IconButton>
-                <Download />
-              </IconButton>
-            </Stack>
-          </Stack>
-          {/* Player Main */}
-          <Stack flexGrow={1}>
-            <MediaPayer music={music} />
-          </Stack>
-       
-        </Stack>
-
-        {/* Right SIde, Comments */}
-        <Stack p={2} spacing={2}>
-          <Button variant="contained" color="primary">
-            Track Portal
-          </Button>
-          <Stack
+          <Grid
+            container
+            spacing={2}
             sx={{
-              bgcolor: "background.paper",
-
-              p: 2,
-              borderRadius: 1,
-              flexGrow: 1,
+              height: "100%",
             }}
           >
-            <Typography> Comments </Typography>
+            {/* Left Side, Media Player */}
 
-            {/* Comment list */}
-            <Stack flexGrow={1}></Stack>
+            <Grid
+              xs={12}
+              md={8}
+              sx={{ height: "100%", bgcolor: "background.paper" }}
+            >
+              <Stack
+                p={2}
+                spacing={2}
+                sx={{
+                  height: "100%",
+                }}
+              >
+                {/* Player Header */}
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="flex-start"
+                >
+                  {/* Left */}
 
-            {/* New comment text fiels */}
+                  <Stack>
+                    <Stack direction="row" spacing={2}>
+                      <Image
+                        width={60}
+                        height={60}
+                        src={music.thumbnail}
+                        alt="Music Thumbnail"
+                      />
+                      <Stack>
+                        <Typography
+                          textTransform="capitalize"
+                          fontWeight="bold"
+                          variant="h5"
+                        >
+                          {music.title}
+                        </Typography>
+                        <Typography variant="caption">
+                          {music.genere}
+                        </Typography>
+                      </Stack>
+                    </Stack>
+                    <Stack
+                      mt={2}
+                      direction="row"
+                      alignItems="center"
+                      spacing={1}
+                    >
+                      <Image
+                        width={24}
+                        height={24}
+                        src={music.artist.avatar}
+                        style={{
+                          borderRadius: "12px",
+                        }}
+                        alt="Artist "
+                      />
+                      <Typography fontWeight="bold" variant="subtitle2">
+                        {music.artist.name}
+                      </Typography>
+                    </Stack>
+                  </Stack>
+                  {/* Right */}
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="flex-end"
+                    spacing={1}
+                  >
+                    <Chip label="Share" size="small" icon={<Share />} />
+                    <IconButton>
+                      <Download />
+                    </IconButton>
+                  </Stack>
+                </Stack>
+                {/* Player Main */}
+                <Stack flexGrow={1} sx={{}}>
+                  <MediaPayer music={music} />
+                </Stack>
+              </Stack>
+            </Grid>
 
-            <TextField multiline />
-          </Stack>
+            {/* Right SIde, Comments */}
+
+            <Grid xs={12} md={4} sx={{ height: "100%" }}>
+              <Stack spacing={2} sx={{ height: "100%" }}>
+                <Button
+                  startIcon={<Headphones />}
+                  sx={{ p: 0, fontWeight: "bold" }}
+                  variant="contained"
+                >
+                  Track Portal
+                </Button>
+                <Stack
+                  sx={{
+                    bgcolor: "background.paper",
+
+                    p: 2,
+                    borderRadius: 1,
+                    flexGrow: 1,
+                  }}
+                  spacing={2}
+                >
+                  <Typography variant="subtitle2" fontWeight="bold">
+                    Comments
+                  </Typography>
+
+                  {/* Comment list */}
+                  <Stack mt={2} flexGrow={1} spacing={2}>
+                    {[1, 2, 3, 4].map((comment, index) => {
+                      return <CommentList key={index} />;
+                    })}
+                  </Stack>
+
+                  {/* New comment text fiels */}
+
+                  <TextField multiline placeholder="Add a comment" />
+                </Stack>
+              </Stack>
+            </Grid>
+          </Grid>
+        </Container>
+      </main>
+    </ThemeProvider>
+  );
+}
+
+function CommentList() {
+  return (
+    <Stack spacing={1} minWidth={300}>
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <Stack direction="row" spacing={0.5} alignItems="center">
+          <Image
+            alt="Cmmenter"
+            src="https://picsum.photos/24"
+            width={24}
+            height={24}
+            style={{
+              borderRadius: 12,
+            }}
+          />
+          <Typography variant="caption" fontWeight="bold">
+            Ojole
+          </Typography>
         </Stack>
+        <Typography variant="caption" color="text.secondary">
+          1 hour ago
+        </Typography>
+        <Button
+          size="small"
+          variant="outlined"
+          sx={{
+            p: 0,
+          }}
+        >
+          1:22
+        </Button>
       </Stack>
-    </Container>
+      <Typography
+        sx={{
+          paddingLeft: "24px",
+        }}
+        variant="caption"
+        fontWeight="bold"
+        color="text.secondary"
+      >
+        Share has execive
+      </Typography>
+    </Stack>
   );
 }
