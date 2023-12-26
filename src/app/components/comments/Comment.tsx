@@ -1,32 +1,12 @@
-"use client";
+import { createTheme } from "@mui/material/styles";
 
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-
-const darkTheme = createTheme({
-  palette: {
-    mode: "dark",
-    background: {
-      default: "#121212",
-      paper: "#1a1b1e",
-    },
-  },
-});
-
-import {
-  Download,
-  Headphones,
-  HeartBroken,
-  PlayArrow,
-  Share,
-} from "@mui/icons-material";
+import { Download, Headphones, HeartBroken } from "@mui/icons-material";
 import {
   Button,
   Chip,
   Container,
   IconButton,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 import Image from "next/image";
@@ -34,7 +14,7 @@ import Image from "next/image";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { useState } from "react";
 
-export async function CommentReply() {
+export function CommentReply() {
   const [favoriteComment, setFavoriteComment] = useState(false);
 
   return (
@@ -84,7 +64,7 @@ export async function CommentReply() {
     </>
   );
 }
-export async function Comment(props: { showReplies: boolean }) {
+export function Comment(props: { showReplies: boolean }) {
   const { showReplies } = props;
   const [favoriteComment, setFavoriteComment] = useState(false);
   return (
@@ -165,7 +145,7 @@ export async function Comment(props: { showReplies: boolean }) {
   );
 }
 
-export async function CommentList() {
+export function CommentList() {
   return (
     <Stack spacing={1} minWidth={300}>
       <Comment showReplies={true} />
@@ -173,7 +153,7 @@ export async function CommentList() {
   );
 }
 
-export async function CommentCard() {
+export function CommentCard() {
   return (
     <Stack
       spacing={1}
