@@ -22,7 +22,7 @@ import { AudioVisualizer } from "react-audio-visualize";
 import useSettings from "../useSettings";
 import { PauseCircle, PlayArrow } from "@mui/icons-material";
 import moment from "moment";
-import { CommentCard } from "../page";
+import { CommentCard } from "./comments/Comment";
 
 // This is a client component 👈🏽
 
@@ -116,10 +116,17 @@ export default function MediaPayer(props: { music: Music }) {
             <Slider
               max={100}
               value={(currentTime / duration) * 100}
-              onChange={(e) => {
+              onChange={(e: unknown) => {
                 if (audioPlayerRef.current) {
-                  audioPlayerRef.current.currentTime =
-                    duration * (e.target.value / 100);
+                  const value = (
+                    e as {
+                      target: {
+                        value: number;
+                      };
+                    }
+                  ).target.value;
+
+                  audioPlayerRef.current.currentTime = duration * (value / 100);
                 }
               }}
             />
@@ -177,7 +184,7 @@ export default function MediaPayer(props: { music: Music }) {
               boxShadow: "0px -35px 62px -5px #288459",
             }}
           >
-            <CommentCard></CommentCard>
+            <CommentCard />
           </Box>
         </Stack>
       ) : (
