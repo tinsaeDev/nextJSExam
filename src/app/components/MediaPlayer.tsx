@@ -22,6 +22,7 @@ import { AudioVisualizer } from "react-audio-visualize";
 import useSettings from "../useSettings";
 import { PauseCircle, PlayArrow } from "@mui/icons-material";
 import moment from "moment";
+import { CommentCard } from "../page";
 
 // This is a client component 👈🏽
 
@@ -103,6 +104,7 @@ export default function MediaPayer(props: { music: Music }) {
           justifyContent="space-between"
           sx={{
             height: "100%",
+            position: "relative",
           }}
         >
           <PL blob={blob} />
@@ -164,6 +166,19 @@ export default function MediaPayer(props: { music: Music }) {
               <span></span>
             </Stack>
           </Stack>
+
+          {/* Markers */}
+          <Box
+            sx={{
+              position: "absolute",
+              top: "10px",
+              left: "100px",
+              bgcolor: "background.paper",
+              boxShadow: "0px -35px 62px -5px #288459",
+            }}
+          >
+            <CommentCard></CommentCard>
+          </Box>
         </Stack>
       ) : (
         <Skeleton width={800} height={300} variant="rounded" />

@@ -228,7 +228,59 @@ function CommentList() {
         fontWeight="bold"
         color="text.secondary"
       >
-        Share has execive
+        Snare has execive reverb! How does it sound to you?
+      </Typography>
+    </Stack>
+  );
+}
+
+export function CommentCard() {
+  return (
+    <Stack
+      spacing={1}
+      p={2}
+      maxWidth={300}
+      sx={{
+        borderRadius:1
+      }}
+    >
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <Stack direction="row" spacing={0.5} alignItems="center">
+          <Image
+            alt="Cmmenter"
+            src="https://picsum.photos/24"
+            width={24}
+            height={24}
+            style={{
+              borderRadius: 12,
+            }}
+          />
+          <Typography variant="caption" fontWeight="bold">
+            Ojole
+          </Typography>
+        </Stack>
+        <Typography variant="caption" color="text.secondary">
+          1 hour ago
+        </Typography>
+        <Button
+          size="small"
+          variant="outlined"
+          sx={{
+            p: 0,
+          }}
+        >
+          1:22
+        </Button>
+      </Stack>
+      <Typography
+        sx={{
+          paddingLeft: "24px",
+        }}
+        variant="caption"
+        fontWeight="bold"
+        color="text.secondary"
+      >
+        Snare has execive reverb! How does it sound to you?
       </Typography>
     </Stack>
   );
