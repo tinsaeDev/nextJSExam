@@ -57,15 +57,15 @@ export default function Home() {
             replies: [],
             updated_at: "",
             user: {
-              avatar: "/images/music_thumbnails/beat_it.jpg",
-              name: "Thomas",
+              avatar: "/images/users/1.jpg",
+              name: "Janice ",
             },
             time: 120,
           },
         ],
         updated_at: "",
         user: {
-          avatar: "/images/music_thumbnails/beat_it.jpg",
+          avatar: "/images/users/2.jpg",
           name: "Thomas",
         },
         time: 20,
@@ -77,10 +77,23 @@ export default function Home() {
         replies: [],
         updated_at: "",
         user: {
-          avatar: "/images/music_thumbnails/beat_it.jpg",
-          name: "Thomas",
+          avatar: "/images/users/3.jpg",
+          name: "Tinsae N.",
         },
         time: 120,
+      },
+
+      {
+        text: "Keep it up!",
+        created_at: "",
+        like_count: 9,
+        replies: [],
+        updated_at: "",
+        user: {
+          avatar: "/images/users/4.jpg",
+          name: "Joseph E.",
+        },
+        time: 300,
       },
     ],
   };
@@ -202,8 +215,13 @@ export default function Home() {
               <Stack spacing={2} sx={{ height: "100%" }}>
                 <Button
                   startIcon={<Headphones />}
-                  sx={{ p: 0, fontWeight: "bold" }}
+                  
                   variant="contained"
+                  sx={{
+                    fontWeight: "bold",
+                    bgcolor: "background.paper",
+                    color:"text.primary"
+                  }}
                 >
                   Track Portal
                 </Button>
