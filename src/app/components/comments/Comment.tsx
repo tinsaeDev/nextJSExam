@@ -170,7 +170,8 @@ export function CommentCard(props: { comment: MusicComment }) {
     <Stack
       spacing={1}
       p={2}
-      maxWidth={300}
+      minWidth={300}
+      maxWidth={400}
       sx={{
         borderRadius: 1,
       }}

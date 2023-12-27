@@ -10,8 +10,10 @@ import {
   Typography,
 } from "@mui/material";
 import {
+  MutableRefObject,
   createRef,
   memo,
+  useCallback,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -28,8 +30,12 @@ import Image from "next/image";
 
 // This is a client component 👈🏽
 
-const Visualizer = (props: { blob: Blob; currentTime: number }) => {
-  const { blob, currentTime } = props;
+const Visualizer = (props: {
+  blob: Blob;
+  currentTime: number;
+  width: number;
+}) => {
+  const { blob, currentTime, width } = props;
   const visualizerRef = useRef<HTMLCanvasElement>(null);
 
   // set blob somewhere in code
@@ -43,11 +49,11 @@ const Visualizer = (props: { blob: Blob; currentTime: number }) => {
     >
       {
         <AudioVisualizer
-          currentTime={props.currentTime}
+          currentTime={currentTime}
           ref={visualizerRef}
           blob={blob}
-          width={600}
-          height={200}
+          width={width}
+          height={300}
           barWidth={1}
           gap={1}
           barColor={"#fff"}
@@ -98,11 +104,23 @@ export default function MediaPayer(props: {
   const [currentTime, setCurrentTime] = useState<number>(0);
 
   const duration = audioPlayerRef.current?.duration || 0;
+
+  const [width, setWidth] = useState(0);
+  const elementRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!elementRef?.current) {
+      return;
+    }
+
+    setWidth(elementRef.current.getBoundingClientRect().width);
+  }, []); //empty dependency array so it only runs once at render
+
   return (
     <Box
+      ref={elementRef}
       sx={{
         position: "relative",
-
         height: "100%",
       }}
     >
@@ -117,7 +135,7 @@ export default function MediaPayer(props: {
         >
           <PL blob={blob} />
 
-          <Visualizer blob={blob} currentTime={currentTime} />
+          <Visualizer blob={blob} currentTime={currentTime} width={width} />
 
           {/* Player Footer */}
           <Stack>
@@ -205,7 +223,7 @@ export default function MediaPayer(props: {
               <Box
                 sx={{
                   position: "absolute",
-                  top: "10px",
+                  top: "20px",
                   left: "100px",
                   bgcolor: "background.paper",
                   boxShadow: "0px -35px 62px -5px #288459",
@@ -224,7 +242,7 @@ export default function MediaPayer(props: {
                 key={index}
                 sx={{
                   position: "absolute",
-                  top: 100,
+                  top: 250,
                   left: `${left}%`,
                   cursor: "pointer",
                 }}
@@ -246,7 +264,7 @@ export default function MediaPayer(props: {
           })}
         </Stack>
       ) : (
-        <Skeleton width={800} height={300} variant="rounded" />
+        <Skeleton width="100%" height={300} variant="rounded" />
       )}
     </Box>
   );
