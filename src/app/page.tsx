@@ -13,13 +13,7 @@ const darkTheme = createTheme({
   },
 });
 
-import {
-  Download,
-  Headphones,
-  HeartBroken,
-  PlayArrow,
-  Share,
-} from "@mui/icons-material";
+import { Download, Headphones, Share } from "@mui/icons-material";
 import {
   Button,
   Chip,
@@ -33,6 +27,7 @@ import Image from "next/image";
 import MediaPayer from "./components/MediaPlayer";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { CommentList } from "./components/comments/Comment";
+import { useState } from "react";
 
 export default function Home() {
   const music: Music = {
@@ -40,7 +35,6 @@ export default function Home() {
       name: "Mickael Jackson",
       avatar: "/images/artists/jackson.jpg",
     },
-    comments: [],
     genere: "Rap",
     thumbnail: "/images/music_thumbnails/beat_it.jpg",
     src: {
@@ -48,8 +42,50 @@ export default function Home() {
       "192": "/audio/music/beat_it/192.mp3",
       "320": "/audio/music/beat_it/320.mp3",
     },
+    duration: 325,
     title: "Beat It",
+    comments: [
+      {
+        text: "Very nice music",
+        created_at: "",
+        like_count: 2,
+        replies: [
+          {
+            text: "I second this",
+            created_at: "",
+            like_count: 4,
+            replies: [],
+            updated_at: "",
+            user: {
+              avatar: "/images/music_thumbnails/beat_it.jpg",
+              name: "Thomas",
+            },
+            time: 120,
+          },
+        ],
+        updated_at: "",
+        user: {
+          avatar: "/images/music_thumbnails/beat_it.jpg",
+          name: "Thomas",
+        },
+        time: 20,
+      },
+      {
+        text: "Wow, nice tune",
+        created_at: "",
+        like_count: 4,
+        replies: [],
+        updated_at: "",
+        user: {
+          avatar: "/images/music_thumbnails/beat_it.jpg",
+          name: "Thomas",
+        },
+        time: 120,
+      },
+    ],
   };
+
+  const [floatingComment, setFloatingComment] = useState<MusicComment>();
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
@@ -146,7 +182,16 @@ export default function Home() {
                 </Stack>
                 {/* Player Main */}
                 <Stack flexGrow={1} sx={{}}>
-                  <MediaPayer music={music} />
+                  <MediaPayer
+                    music={music}
+                    floatingComment={floatingComment}
+                    setFloatingComment={(comment) => {
+                      setFloatingComment(comment);
+                    }}
+                    onCloseFloatingComment={() => {
+                      setFloatingComment(undefined);
+                    }}
+                  />
                 </Stack>
               </Stack>
             </Grid>
@@ -187,8 +232,16 @@ export default function Home() {
                       overflow: "auto",
                     }}
                   >
-                    {[1, 2, 3, 4].map((comment, index) => {
-                      return <CommentList key={index} />;
+                    {music.comments.map((comment, index) => {
+                      return (
+                        <CommentList
+                          onMaximize={(comment: MusicComment) => {
+                            setFloatingComment(comment);
+                          }}
+                          comment={comment}
+                          key={index}
+                        />
+                      );
                     })}
                   </Stack>
 

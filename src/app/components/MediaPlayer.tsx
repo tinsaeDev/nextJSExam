@@ -2,6 +2,7 @@
 import {
   Box,
   Fab,
+  IconButton,
   Skeleton,
   Slide,
   Slider,
@@ -23,6 +24,7 @@ import useSettings from "../useSettings";
 import { PauseCircle, PlayArrow } from "@mui/icons-material";
 import moment from "moment";
 import { CommentCard } from "./comments/Comment";
+import Image from "next/image";
 
 // This is a client component 👈🏽
 
@@ -62,11 +64,17 @@ const PL = memo(function Player(props: { blob: Blob }) {
   return <audio ref={audioPlayerRef} src={URL.createObjectURL(blob)} />;
 });
 
-export default function MediaPayer(props: { music: Music }) {
+export default function MediaPayer(props: {
+  music: Music;
+  floatingComment: MusicComment | undefined;
+  setFloatingComment: (comment: MusicComment) => void;
+  onCloseFloatingComment: () => void;
+}) {
+  const { music } = props;
   const settings = useSettings();
 
   const audioQulaity = settings.getAudioQuality();
-  const musicUrl = props.music.src[audioQulaity];
+  const musicUrl = music.src[audioQulaity];
 
   const [blob, setBlob] = useState<Blob>();
 
@@ -175,17 +183,67 @@ export default function MediaPayer(props: { music: Music }) {
           </Stack>
 
           {/* Markers */}
-          <Box
-            sx={{
-              position: "absolute",
-              top: "10px",
-              left: "100px",
-              bgcolor: "background.paper",
-              boxShadow: "0px -35px 62px -5px #288459",
-            }}
-          >
-            <CommentCard />
-          </Box>
+
+          {/* Floating COmment */}
+          {props.floatingComment && (
+            <Box
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                zIndex: 100,
+                width: "100%",
+                height: "100%",
+              }}
+              onClick={(e) => {
+                if (e.currentTarget != e.target) {
+                  return;
+                }
+                props.onCloseFloatingComment();
+              }}
+            >
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "10px",
+                  left: "100px",
+                  bgcolor: "background.paper",
+                  boxShadow: "0px -35px 62px -5px #288459",
+                }}
+              >
+                <CommentCard comment={props.floatingComment} />
+              </Box>
+            </Box>
+          )}
+
+          {/* Comments */}
+          {music.comments.map((comment, index) => {
+            const left = (comment.time / music.duration) * 100;
+            return (
+              <Box
+                key={index}
+                sx={{
+                  position: "absolute",
+                  top: 100,
+                  left: `${left}%`,
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  props.setFloatingComment(comment);
+                }}
+              >
+                <Image
+                  src={comment.user.avatar}
+                  width={32}
+                  height={32}
+                  alt="Comment user"
+                  style={{
+                    borderRadius: 16,
+                  }}
+                />
+              </Box>
+            );
+          })}
         </Stack>
       ) : (
         <Skeleton width={800} height={300} variant="rounded" />

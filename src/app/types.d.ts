@@ -1,21 +1,22 @@
-interface Artist {
+type Artist = {
   name: string;
   avatar: string;
-}
+};
 
-interface PlayList {
+type PlayList = {
   name: string;
   list: Music[];
-}
+};
 
-interface Music {
+type Music = {
   title: string;
+  duration: number;
   genere: MusicGenere;
   thumbnail: string;
   src: MusicSource;
   artist: Artist;
-  comments: Comment[];
-}
+  comments: MusicComment[];
+};
 
 type MusicSource = {
   "320": string;
@@ -24,15 +25,17 @@ type MusicSource = {
 };
 type MusicGenere = "HipHop" | "Rap" | "Oldies" | "Blues";
 
-interface Comment {
+type MusicComment = {
+  text: string;
   like_count: number;
   user: User;
-  replies: Comment[];
+  replies: MusicComment[];
   created_at: string;
   updated_at: string;
-}
+  time: number;
+};
 
-interface User {
+type User = {
   name: string;
   avatar: string;
-}
+};

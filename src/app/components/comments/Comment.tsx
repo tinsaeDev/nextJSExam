@@ -1,20 +1,12 @@
-import { createTheme } from "@mui/material/styles";
-
-import { Download, Headphones, HeartBroken } from "@mui/icons-material";
-import {
-  Button,
-  Chip,
-  Container,
-  IconButton,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { HeartBroken } from "@mui/icons-material";
+import { Button, IconButton, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 
-import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { useState } from "react";
+import { common } from "@mui/material/colors";
+import moment from "moment";
 
-export function CommentReply() {
+export function CommentReply(props: { comment: MusicComment }) {
   const [favoriteComment, setFavoriteComment] = useState(false);
 
   return (
@@ -23,7 +15,7 @@ export function CommentReply() {
         <Stack direction="row" spacing={0.5} alignItems="center">
           <Image
             alt="Cmmenter"
-            src="https://picsum.photos/24"
+            src={props.comment.user.avatar}
             width={24}
             height={24}
             style={{
@@ -31,7 +23,7 @@ export function CommentReply() {
             }}
           />
           <Typography variant="caption" fontWeight="bold">
-            Ojole
+            {props.comment.user.name}
           </Typography>
         </Stack>
         <Typography variant="caption" color="text.secondary">
@@ -45,7 +37,7 @@ export function CommentReply() {
         }}
       >
         <Typography variant="caption" fontWeight="bold" color="text.secondary">
-          Snare has execive reverb! How does it sound to you?
+          {props.comment.text}
         </Typography>
 
         {/* Reactions */}
@@ -64,16 +56,22 @@ export function CommentReply() {
     </>
   );
 }
-export function Comment(props: { showReplies: boolean }) {
-  const { showReplies } = props;
+export function MusicComment(props: {
+  comment: MusicComment;
+  showReplies: boolean;
+  onMaximize?: (comment: MusicComment) => void;
+}) {
+  const { comment, showReplies } = props;
+  debugger;
   const [favoriteComment, setFavoriteComment] = useState(false);
+  const likeCount = comment.like_count + (favoriteComment ? 1 : 0);
   return (
     <>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Stack direction="row" spacing={0.5} alignItems="center">
           <Image
             alt="Cmmenter"
-            src="https://picsum.photos/24"
+            src={comment.user.avatar}
             width={24}
             height={24}
             style={{
@@ -81,7 +79,7 @@ export function Comment(props: { showReplies: boolean }) {
             }}
           />
           <Typography variant="caption" fontWeight="bold">
-            Ojole
+            {comment.user.name}
           </Typography>
         </Stack>
         <Typography variant="caption" color="text.secondary">
@@ -93,8 +91,13 @@ export function Comment(props: { showReplies: boolean }) {
           sx={{
             p: 0,
           }}
+          onClick={() => {
+            if (props.onMaximize) {
+              props.onMaximize(comment);
+            }
+          }}
         >
-          1:22
+          {moment(comment.time * 1000).format("mm:ss")}
         </Button>
       </Stack>
       <Stack
@@ -103,7 +106,7 @@ export function Comment(props: { showReplies: boolean }) {
         }}
       >
         <Typography variant="caption" fontWeight="bold" color="text.secondary">
-          Snare has execive reverb! How does it sound to you?
+          {comment.text}
         </Typography>
 
         {/* Reactions */}
@@ -126,18 +129,20 @@ export function Comment(props: { showReplies: boolean }) {
             >
               <HeartBroken color={favoriteComment ? "info" : "inherit"} />
             </IconButton>
-            <Typography>2</Typography>
+            <Typography> {likeCount} </Typography>
           </Stack>
         </Stack>
 
-        {/* Replies */}
-        {showReplies && (
+        {props.showReplies && (
           <Stack
             sx={{
               paddingLeft: "1rem",
             }}
           >
-            <CommentReply />
+            {/* Replies */}
+            {comment.replies.map((reply, index) => {
+              return <CommentReply key={index} comment={reply} />;
+            })}
           </Stack>
         )}
       </Stack>
@@ -145,15 +150,22 @@ export function Comment(props: { showReplies: boolean }) {
   );
 }
 
-export function CommentList() {
+export function CommentList(props: {
+  comment: MusicComment;
+  onMaximize: (comment: MusicComment) => void;
+}) {
   return (
     <Stack spacing={1} minWidth={300}>
-      <Comment showReplies={true} />
+      <MusicComment
+        onMaximize={props.onMaximize}
+        comment={props.comment}
+        showReplies={true}
+      />
     </Stack>
   );
 }
 
-export function CommentCard() {
+export function CommentCard(props: { comment: MusicComment }) {
   return (
     <Stack
       spacing={1}
@@ -163,7 +175,7 @@ export function CommentCard() {
         borderRadius: 1,
       }}
     >
-      <Comment showReplies={false} />
+      <MusicComment comment={props.comment} showReplies={false} />
     </Stack>
   );
 }
